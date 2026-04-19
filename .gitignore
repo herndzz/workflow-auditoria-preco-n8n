@@ -1,0 +1,11 @@
+# Ignorar bancos de dados locais (MUITO IMPORTANTE)
+n8n_data/
+n8n_mysql_data/
+n8n_redis_data/
+
+# Ignorar arquivos com senhas reais
+.env
+
+# Ignorar arquivos de sistema operacional
+.DS_Store
+Thumbs.db
