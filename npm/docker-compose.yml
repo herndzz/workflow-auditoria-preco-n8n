@@ -1,0 +1,17 @@
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx_proxy_manager
+    restart: unless-stopped
+    ports:
+      - '80:80'      # Tráfego web HTTP (Para validação SSL)
+      - '81:81'      # Painel de Administração do NPM
+      - '443:443'    # Tráfego web HTTPS blindado
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
