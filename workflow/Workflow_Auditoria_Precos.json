@@ -1,0 +1,1808 @@
+{
+  "name": "Automacao_PrecoDistribuidoraV8",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "callback_query",
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -256,
+        -80
+      ],
+      "id": "a99ca71f-3df8-48b0-baf4-ec841494ee88",
+      "name": "Telegram Trigger",
+      "webhookId": "48126e11-8c2e-4f39-9fd7-4094cae33450",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.item.json;\nlet chatId = \"\";\nlet textoComando = \"\";\nlet isCallback = false;\nlet nomeUsuario = \"\";\n\nif (data.message) {\n    // É uma mensagem de texto normal digitada pelo usuário\n    chatId = data.message.chat.id;\n    textoComando = data.message.text || \"\";\n    nomeUsuario = data.message.from.first_name || \"Usuário\";\n    \n} else if (data.callback_query) {\n    // É um clique em um botão Inline (Callback)\n    chatId = data.callback_query.message.chat.id;\n    textoComando = data.callback_query.data || \"\";\n    isCallback = true;\n    nomeUsuario = data.callback_query.from.first_name || \"Usuário\";\n}\n\n// Retorna um JSON limpo e padronizado para o n8n\nreturn {\n    chatId: chatId,\n    comando: textoComando.toLowerCase().trim(),\n    isCallback: isCallback,\n    nome: nomeUsuario\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -80
+      ],
+      "id": "20e59719-8ab7-43d7-abf7-544985e0d6d0",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "17f27de5-0661-42f6-8d1f-7458828982e5",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.comando }}",
+                    "rightValue": "sair_ia",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "661fa149-7559-47d8-a387-e9ee9d02ebf2",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.comando }}",
+                    "rightValue": "modo_ia",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "7a4963d5-d0a9-4402-b591-d95ac9448b26",
+                    "leftValue": "={{ $('Checar-Estado-IA').item.json.em_modo_ia }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "6100cbd0-a509-4479-ad97-b0f84eef5bbc",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.comando }}",
+                    "rightValue": "confirmar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "2ee4d03e-b508-4c07-ac73-37005187214b",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.comando }}",
+                    "rightValue": "consultar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Code in JavaScript').item.json.comando }}",
+                    "rightValue": "menu",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "4288db24-9ff2-49dd-990c-dfc1004ba6bc"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "58e3a34b-0998-4d57-a528-765db19a0e0c",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.comando }}",
+                    "rightValue": "inserir",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "74e58c4c-9f4e-4fff-a672-8b2ca7e7515e",
+                    "leftValue": "={{ $('Code in JavaScript').item.json.comando }}",
+                    "rightValue": "deletar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        352,
+        -192
+      ],
+      "id": "d6bddada-9f99-44a2-aff5-2b7e4b8d6f63",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "const texto = $('Code in JavaScript').first().json.comando || \"\";\nconst chatId = $('Code in JavaScript').first().json.chatId; // Correção aqui!\n\n// Extrai apenas os números da mensagem do usuário\nconst apenasNumeros = texto.match(/\\d+/);\n\nif (!apenasNumeros) {\n  return {\n    json: {\n      sucesso: false,\n      chatId: chatId,\n      mensagem: \"❌ Erro: Por favor, informe o ID da auditoria. Exemplo: `confirmar 12`\"\n    }\n  };\n}\n\nreturn {\n  json: {\n    sucesso: true,\n    chatId: chatId,\n    auditoriaId: parseInt(apenasNumeros[0], 10)\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        688,
+        -112
+      ],
+      "id": "6e10d84d-4c49-449e-8143-46abde7234fe",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3a62e809-7d20-4eec-b924-dd85150f71be",
+              "leftValue": "={{ $json.sucesso }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        864,
+        -112
+      ],
+      "id": "9d675cc9-f293-4116-9198-f3f0c22763a7",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "=✅ *Auditoria Concluída com Sucesso!*\n\n📦 *Produto:* {{ $json.produto_nome }}\n💵 *Preço Validado:* R$ {{ $json.preco_novo }}\n📋 *Status:* Alterado para Conferido no Sistema.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1440,
+        -144
+      ],
+      "id": "f1451d98-6b11-488f-b0d1-2fe1eba005d1",
+      "name": "Send a text message5",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4c229be6-c1fb-4762-bdb6-053313e6ead1",
+              "leftValue": "={{ $json.produto_nome }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1232,
+        -128
+      ],
+      "id": "96f8c35e-a8aa-47a6-b3e9-3ffacac584f6",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "=❌ Erro: Esse ID de auditoria não foi encontrado no sistema. Verifique o número e tente novamente.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1440,
+        16
+      ],
+      "id": "d345abb7-7b84-4e1c-9026-845dcf4d65e3",
+      "name": "Send a text message6",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "=❌ Produto não encontrado no estoque da sua empresa ou termo muito genérico.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1632,
+        880
+      ],
+      "id": "8fc3d1b6-227e-47b0-a682-dd04709f1318",
+      "name": "Send a text message8",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5e58f6a1-a9bf-4c31-aca7-d65680d40640",
+              "leftValue": "={{ $json.id || '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1456,
+        736
+      ],
+      "id": "16a2f233-4fb7-43bb-b390-654a8e6c4d51",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, produto_nome, preco_novo, status, criado_em \nFROM auditoria_precos\nWHERE empresa_id = (SELECT empresa_id FROM usuarios_telegram WHERE chat_id = '{{ $('Code in JavaScript').item.json.chatId }}')\n  AND produto_nome ILIKE '%{{ $json.termo_limpo }}%'\nORDER BY id DESC\nLIMIT 15;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1280,
+        736
+      ],
+      "id": "7a8eb6ee-1493-4bce-9840-5a66146b3861",
+      "name": "Consultar-por-Nome",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "={{ $json.texto_telegram }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1984,
+        736
+      ],
+      "id": "89f3f171-bd2c-4ed9-a5cd-591ff4d8229c",
+      "name": "Send a text message7",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega os dados que o nó Aggregate juntou\nconst itens = $input.first().json; \nconst lista = itens.data || itens; \n\n// Busca os dados originais direto do nó 'Parser'\nconst parserData = $('Parser').first().json;\nconst chatId = parserData.chatId;\nconst termoPesquisado = parserData.termo_limpo;\n\nlet relatorio = `🔍 *Histórico (Últimos 15) para: \"${termoPesquisado}\"*\\n\\n`;\n\n// Se o banco não encontrou nenhum produto com esse nome\nif (!Array.isArray(lista) || lista.length === 0 || !lista[0].id) {\n    relatorio += \"❌ Nenhum registro de preço ou auditoria encontrado para este produto.\";\n} else {\n    // Varre os resultados encontrados\n    for (let item of lista) {\n        // Formata a data de criação do registro, porque a do banco de dados é muito feia\n        const dataFormatada = new Date(item.criado_em).toLocaleString('pt-BR', {dateStyle: 'short', timeStyle: 'short'});\n        \n        // Define o emoji com base no status da auditoria\n        let emojiStatus = \"⏳\"; // Pendente\n        if (item.status === 'Conferido e Aprovado') {\n            emojiStatus = \"✅\";\n        } else if (item.status === 'Rejeitado') {\n            emojiStatus = \"❌\";\n        }\n\n        relatorio += `🔹 *ID:* ${item.id}\\n`;\n        relatorio += `📦 *Produto:* ${item.produto_nome}\\n`;\n        relatorio += `💵 *Preço:* R$ ${item.preco_novo}\\n`;\n        relatorio += `${emojiStatus} *Status:* ${item.status || 'Pendente'}\\n`;\n        relatorio += `📅 *Criado em:* R$ ${dataFormatada}\\n`;\n        relatorio += `---------------------------\\n`;\n    }\n}\n\n// Retorna os dados formatados para o nó do Telegram\nreturn {\n    json: {\n        chatId: chatId,\n        texto_telegram: relatorio\n    }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1808,
+        736
+      ],
+      "id": "85917125-c2f2-452b-b97e-b91a8283d668",
+      "name": "Code in JavaScript5"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        736
+      ],
+      "id": "0b0bdd37-7003-44ce-b8be-dfce04314a80",
+      "name": "Aggregate2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, produto_nome, preco_novo, conferido_em \nFROM auditoria_precos\nWHERE empresa_id = (SELECT empresa_id FROM usuarios_telegram WHERE chat_id = '{{ $('Code in JavaScript').item.json.chatId }}')\n  AND status = 'Conferido e Aprovado'\n  AND conferido_em >= CURRENT_DATE - INTERVAL '7 days'\nORDER BY conferido_em DESC\nLIMIT 15;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1280,
+        512
+      ],
+      "id": "5d5b00bf-0efd-4d88-88e3-2200149a6f0e",
+      "name": "Consulta-Aprovados",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega a frase inteira (ex: \"consultar coca cola 2l\" ou \"relatorio 7 dias\")\nconst texto = $('Code in JavaScript').first().json.comando || \"\";\n\n// Divide a frase em palavras\nconst partes = texto.split(\" \");\n\n// Remove a primeira palavra (o comando: \"consultar\", \"buscar\", etc)\npartes.shift(); \n\n// Junta o resto da frase para ser o nosso termo limpo\nconst termoBusca = partes.join(\" \").trim();\n\nreturn {\n  json: {\n    chatId: $input.first().json.chatId,\n    termo_limpo: termoBusca // Isso vai mandar apenas \"coca cola 2l\"\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        432
+      ],
+      "id": "c84d0455-c9c9-4e38-9379-a361183d900b",
+      "name": "Parser"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        512
+      ],
+      "id": "89631b95-4a16-46e6-b7d9-3be5866e39b1",
+      "name": "Aggregate1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega os dados do Aggregate correspondente\nconst itens = $input.first().json; \nconst lista = itens.data || itens; \n\n// Pesca o chatId do Parser\nconst chatId = $('Parser').first().json.chatId;\n\nlet relatorio = \"✅ *Relatório de Aprovados (Últimos 7 dias)*\\n\\n\";\n\nif (!Array.isArray(lista) || lista.length === 0 || !lista[0].id) {\n    relatorio += \"Nenhuma auditoria aprovada neste período.\";\n} else {\n    for (let item of lista) {\n        relatorio += `🔹 *ID:* ${item.id}\\n`;\n        relatorio += `📦 *Produto:* ${item.produto_nome}\\n`;\n        relatorio += `💵 *Preço Novo:* R$ ${item.preco_novo}\\n`;\n        \n        // Formata a data se ela existir\n        if (item.conferido_em) {\n            const dataObjeto = new Date(item.conferido_em);\n            const dataFormatada = dataObjeto.toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });\n            relatorio += `🗓️ *Conferido em:* ${dataFormatada}\\n`;\n        }\n        relatorio += `---------------------------\\n`;\n    }\n}\n\nreturn {\n    json: {\n        chatId: chatId,\n        texto_telegram: relatorio\n    }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1648,
+        512
+      ],
+      "id": "859cff3c-f6b7-42be-bfc1-10b3477e8faa",
+      "name": "Code in JavaScript4"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.termo_limpo }}",
+                    "rightValue": "pendentes",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "4288db24-9ff2-49dd-990c-dfc1004ba6bc"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "661fa149-7559-47d8-a387-e9ee9d02ebf2",
+                    "leftValue": "={{ $json.termo_limpo }}",
+                    "rightValue": "aprovados",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1040,
+        416
+      ],
+      "id": "36b5d21d-e8e3-4f8d-95c2-92f8e618e7c7",
+      "name": "Switch-Consultar"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "={{ $json.texto_telegram }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1840,
+        512
+      ],
+      "id": "0c1036d5-9277-40c5-9f51-1281750c2506",
+      "name": "Send a text message10",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1472,
+        304
+      ],
+      "id": "253b3d45-05e8-4996-acda-1101e56e9b0e",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pega os dados que o nó Aggregate juntou\nconst itens = $input.first().json; \nconst lista = itens.data || itens; \n\n// 'Pesca' o chatId no nó com o nome exato de 'Parser'\nconst chatId = $('Parser').first().json.chatId;\n\nlet relatorio = \"📋 *Resultado da Consulta - 15 Pendentes mais recentes*\\n\\n\";\n\n// Se o banco não devolveu nada (array vazio)\nif (!Array.isArray(lista) || lista.length === 0 || !lista[0].id) {\n    relatorio += \"Nenhum registo encontrado para este filtro.\";\n} else {\n    // Monta o texto para cada item da lista\n    for (let item of lista) {\n      // Formata a data de criação do registro, porque a do banco de dados é muito feia\n      const dataFormatada = new Date(item.criado_em).toLocaleString('pt-BR', {dateStyle: 'short', timeStyle: 'short'});\n      \n      relatorio += `🔹 *ID:* ${item.id}\\n`;\n      relatorio += `📦 *Produto:* ${item.produto_nome}\\n`;\n      relatorio += `💵 *Preço Novo:* R$ ${item.preco_novo}\\n`;\n      relatorio += `📅 *Criado em:* R$ ${dataFormatada}\\n`;\n      //if (item.status) relatorio += `🏷️ *Status:* ${item.status}\\n`;\n      relatorio += `---------------------------\\n`;\n    }\n}\n\n// Entrega a mensagem pronta para enviar\nreturn {\n    json: {\n        chatId: chatId,\n        texto_telegram: relatorio\n    }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1648,
+        304
+      ],
+      "id": "21161426-550e-469c-9be8-9a1bec372265",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, produto_nome, preco_novo, criado_em \nFROM auditoria_precos\nWHERE empresa_id = (SELECT empresa_id FROM usuarios_telegram WHERE chat_id = '{{ $('Code in JavaScript').item.json.chatId }}')\n  AND status = 'Pendente'\nORDER BY criado_em DESC\nLIMIT 15;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1280,
+        304
+      ],
+      "id": "7b3b3921-e19f-4538-9add-ba21e6bfbfa7",
+      "name": "Consulta-Pendentes",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputJson = $input.first().json;\n\n// Busca o texto na estrutura exata que o LangChain Gemini devolveu no seu log\nlet respostaIA = \"\";\nif (inputJson.content && inputJson.content.parts && inputJson.content.parts[0]) {\n    respostaIA = inputJson.content.parts[0].text;\n} else {\n    // Mantém as outras opções como plano B caso o n8n atualize a versão\n    respostaIA = inputJson.output || inputJson.text || inputJson.data || \"\";\n}\n\n// Expressão regular para forçar a captura apenas do que estiver dentro das chaves {}\nlet dadosLimpos;\ntry {\n    const match = respostaIA.match(/\\{[\\s\\S]*\\}/);\n    if (!match) throw new Error(\"Não encontrou chaves JSON\");\n    dadosLimpos = JSON.parse(match[0]);\n} catch (erro) {\n    // Fallback de segurança se a IA falhar em gerar o JSON\n    dadosLimpos = { produto: \"Erro de Extração\", preco: 0.00 };\n}\n\n// Pesca as informações vitais do nó inicial\nconst dadosIniciais = $('Code in JavaScript').first().json;\n\nreturn {\n    json: {\n        chatId: dadosIniciais.chatId,\n        texto_original: dadosIniciais.comando,\n        produto_ia: dadosLimpos.produto,\n        preco_ia: parseFloat(dadosLimpos.preco)\n    }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        -432
+      ],
+      "id": "add5fd6f-be79-4575-9d88-9cecffcfbdce",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO auditoria_precos (empresa_id, solicitado_por, produto_texto_original, produto_nome, preco_novo, status)\nVALUES (\n    (SELECT empresa_id FROM usuarios_telegram WHERE chat_id = '{{ $json.chatId }}'),\n    '{{ $json.chatId }}',\n    '{{ $json.texto_original }}',\n    '{{ $json.produto_ia }}',\n    {{ $json.preco_ia }},\n    'Pendente'\n) RETURNING id, produto_nome, preco_novo;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1360,
+        -432
+      ],
+      "id": "3730d1e2-3506-4a4b-8f5e-1bf639d631c8",
+      "name": "Inserir-Modo-IA",
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "=🤖 *Mensagem Processada pela IA!*\n\nEntendi que você enviou uma atualização de preço. Já registrei isso no sistema de auditoria para a equipe conferir na prateleira.\n\n🔹 *ID da Auditoria:* {{ $json.id }}\n📦 *Produto Extraído:* {{ $json.produto_nome }}\n💵 *Preço Extraído:* R$ {{ $json.preco_novo }}\n🏷️ *Status:* Pendente ⏳\n\nPara aprovar este preço mais tarde, basta a equipa ir à prateleira e digitar: `confirmar {{ $json.id }}`",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1536,
+        -432
+      ],
+      "id": "b386903f-3d28-4927-8b2f-a1ae9ee882cd",
+      "name": "Send a text message9",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT em_modo_ia FROM usuarios_telegram WHERE chat_id = '{{ $json.chatId }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        144,
+        -80
+      ],
+      "id": "56db7d29-3cd4-4691-9597-9f9b935e8e49",
+      "name": "Checar-Estado-IA",
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "=Olá, {{ $('Code in JavaScript').item.json.nome }}! 👋\n\nBem-vindo ao 📊 *Sistema de Auditoria de Preços*.\n\nO caderno físico de conferência agora é digital! Este é o seu canal direto e rápido para validar novos descontos, alterações de valores e garantir que a etiqueta na prateleira bate exatamente com o sistema.\n\n👇 *Como interagir com o sistema:*\n\n⚡ *Para cadastrar um preço rápido:*\nDigite `inserir [produto] [preço]`\n(Exemplo: inserir amaciante 15.90)\n\n✅ *Validar um preço na prateleira:*\nVá até o produto e digite `confirmar [ID]`\n(Exemplo: confirmar 3)\n\n🔍 *Verificar o histórico de um item:*\nDigite `consultar [nome do produto]`\n(Exemplo: consultar heineken)\n\n🗑️ *Para apagar um registro:* \nDigite `deletar [ID]`\n(Exemplo: deletar 5)\n\nVocê também pode utilizar os *botões rápidos abaixo* para puxar os relatórios de auditoria instantaneamente:",
+        "replyMarkup": "inlineKeyboard",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "📋 Ver Pendentes",
+                    "additionalFields": {
+                      "callback_data": "consultar pendentes"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "✅ Últimos Aprovados (7 dias)",
+                    "additionalFields": {
+                      "callback_data": "consultar aprovados"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "📦 Catálogo Completo [!em desenvolvimento!]",
+                    "additionalFields": {
+                      "callback_data": "consultar estoque"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "text": "🤖 Cadastrar por Texto Livre (IA)",
+                    "additionalFields": {
+                      "callback_data": "modo_ia"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        352,
+        288
+      ],
+      "id": "9c4fc1e2-1ac0-4a88-8542-d0c926353e2a",
+      "name": "Menu-Principal",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE auditoria_precos \nSET \n    status = 'Conferido e Aprovado',\n    conferido_em = CURRENT_TIMESTAMP,\n    conferido_por = '{{ $json.chatId }}'\nWHERE \n    id = {{ $json.auditoriaId }}\nRETURNING produto_nome, preco_novo;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1056,
+        -128
+      ],
+      "id": "49a1c285-11ea-4351-9dc6-356929abe3d7",
+      "name": "Inserir-Confirmacao",
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "={{ $('Code in JavaScript1').item.json.mensagem }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1056,
+        64
+      ],
+      "id": "91cb07bb-a6a3-4be2-8546-b2ddcc1e8fd7",
+      "name": "Informar-Erro",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE usuarios_telegram SET em_modo_ia = TRUE WHERE chat_id = '{{ $('Code in JavaScript').item.json.chatId }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        864,
+        -736
+      ],
+      "id": "f71f8735-e569-4fb8-8f83-8f281d55f7e4",
+      "name": "Ativar-ModoIA",
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE usuarios_telegram SET em_modo_ia = TRUE WHERE chat_id = '{{ $('Code in JavaScript').item.json.chatId }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        864,
+        -960
+      ],
+      "id": "bfa644f6-bae3-4079-9e96-ccc42a528587",
+      "name": "Desativar-ModoIA",
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "=Modo IA desativado.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1072,
+        -960
+      ],
+      "id": "8622b3c0-8a2b-45a7-b6f7-da07d6e5a046",
+      "name": "Send a text message",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "=🧠 *Modo IA Ativado!* Pode digitar a mensagem com o preço ou desconto. (Para cancelar, digite sair_ia)",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1072,
+        -736
+      ],
+      "id": "5631a26d-62c8-4975-90d5-d65ffbfb406f",
+      "name": "Send a text message1",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE usuarios_telegram SET em_modo_ia = FALSE WHERE chat_id = '{{ $('Code in JavaScript').item.json.chatId }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1712,
+        -432
+      ],
+      "id": "0a863fb8-7b8b-4797-994a-d407cdcf1be8",
+      "name": "Inserir-Modo-IA1",
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Puxa o comando lá do primeiro nó\nconst dadosIniciais = $('Code in JavaScript').first().json;\nconst texto = dadosIniciais.comando || \"\";\n\n// Remove a palavra \"inserir \" do começo\nlet restoDaFrase = texto.replace(/^inserir\\s+/i, '').trim();\n\n// Tenta encontrar o preço no final da frase (ex: 8.50, 8,50, 15)\n// Essa regex procura a última sequência de números (com ponto ou vírgula) na string\nconst regexPreco = /[\\d.,]+$/;\nconst matchPreco = restoDaFrase.match(regexPreco);\n\nlet precoLimpo = 0;\nlet produtoLimpo = restoDaFrase;\n\nif (matchPreco) {\n    // Substitui vírgula por ponto para o banco de dados não reclamar e converte para decimal\n    precoLimpo = parseFloat(matchPreco[0].replace(',', '.'));\n    \n    // Corta o preço do texto para sobrar só o nome do produto\n    produtoLimpo = restoDaFrase.substring(0, matchPreco.index).trim();\n    \n    // Se sobrar um \"r$\" ou traço no final do produto, ele limpa\n    produtoLimpo = produtoLimpo.replace(/(r\\$|-)$/i, '').trim();\n}\n\nreturn {\n    json: {\n        chatId: dadosIniciais.chatId,\n        texto_original: texto,\n        produto_manual: produtoLimpo,\n        preco_manual: precoLimpo\n    }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        1040
+      ],
+      "id": "b6ae5692-1b1d-4699-bc28-08cef5ac069c",
+      "name": "Code in JavaScript6"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "=✅ *Inserção Manual Registrada!*\n\n🔹 *ID da Auditoria:* {{ $json.id }}\n📦 *Produto:* {{ $json.produto_nome }}\n💵 *Preço:* R$ {{ $json.preco_novo }}\n🏷️ *Status:* Pendente ⏳\n\nPara aprovar este preço mais tarde, basta digitar: `confirmar {{ $json.id }}`",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1344,
+        1040
+      ],
+      "id": "863b8cc6-3a09-4621-a6a9-39d62de119f3",
+      "name": "Send a text message11",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const dadosIniciais = $('Code in JavaScript').first().json;\nconst texto = dadosIniciais.comando || \"\";\nconst chatId = dadosIniciais.chatId;\n\n// Extrai apenas os números da mensagem\nconst apenasNumeros = texto.match(/\\d+/);\n\nif (!apenasNumeros) {\n  return {\n    json: {\n      sucesso: false,\n      chatId: chatId,\n      mensagem: \"❌ Erro: Por favor, informe o ID que deseja apagar. Exemplo: `deletar 12`\"\n    }\n  };\n}\n\nreturn {\n  json: {\n    sucesso: true,\n    chatId: chatId,\n    auditoriaId: parseInt(apenasNumeros[0], 10)\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        1328
+      ],
+      "id": "f4a5b6db-0707-4858-859a-f441e89f53c3",
+      "name": "Code in JavaScript7"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM auditoria_precos\nWHERE id = {{ $json.auditoriaId }}\n  AND empresa_id = (SELECT empresa_id FROM usuarios_telegram WHERE chat_id = '{{ $json.chatId }}')\nRETURNING id, produto_nome;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1344,
+        1312
+      ],
+      "id": "573ba156-3a36-4a00-a34d-86e74324a981",
+      "name": "Inserir-Auditoria1",
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "=🗑️ *Registro Excluído com Sucesso!*\n\nO produto *{{ $json.produto_nome }}* (ID: {{ $json.id }}) foi removido permanentemente do sistema de auditoria de preços.",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1520,
+        1312
+      ],
+      "id": "95f78c22-f83b-4628-bea2-e988d6ed0eb5",
+      "name": "Send a text message12",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5e58f6a1-a9bf-4c31-aca7-d65680d40640",
+              "leftValue": "={{ $json.sucesso }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1136,
+        1328
+      ],
+      "id": "dcfdc88e-0dde-4ff8-a799-e5806f6ed217",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "={{ $json.mensagem }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1344,
+        1520
+      ],
+      "id": "d9369c3f-45cb-4c6b-80cf-e6898235e73f",
+      "name": "Send a text message13",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO auditoria_precos (empresa_id, solicitado_por, produto_texto_original, produto_nome, preco_novo, status)\nVALUES (\n    (SELECT empresa_id FROM usuarios_telegram WHERE chat_id = '{{ $json.chatId }}'),\n    '{{ $json.chatId }}',\n    '{{ $json.texto_original }}',\n    '{{ $json.produto_manual }}',\n    {{ $json.preco_manual }},\n    'Pendente'\n) RETURNING id, produto_nome, preco_novo;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1136,
+        1040
+      ],
+      "id": "b126439d-59bf-4fac-a1ef-c844293ca9ed",
+      "name": "Deletar-Auditoria",
+      "credentials": {
+        "postgres": {
+          "id": "CVIbBGuC70KEjHmW",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Code in JavaScript').item.json.chatId }}",
+        "text": "={{ $json.texto_telegram }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1840,
+        304
+      ],
+      "id": "bbfd5046-fc5b-4af0-b10b-d4ba176623f4",
+      "name": "Send a text message15",
+      "webhookId": "424c7790-9348-49f7-9835-fe9ef0bea928",
+      "credentials": {
+        "telegramApi": {
+          "id": "KiUQ0ceT9AJSUNiR",
+          "name": "TokenBotFather"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "##  Pré Menu\nVerifica se o usuário está no modo_ia, e é responsável por pegar a mensagem e verificar qual comando foi inserido\n",
+        "height": 112,
+        "width": 496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -240,
+        -240
+      ],
+      "typeVersion": 1,
+      "id": "0fb3f3c3-f20f-4c11-94b8-db3b8dd517ee",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Menu\nEm caso de comando inválido ou digitado 'menu', será encaminhado para esse",
+        "width": 176
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        304,
+        448
+      ],
+      "typeVersion": 1,
+      "id": "f5bdbd77-b5f8-4b6e-8c7b-f2b66e041fa6",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Desativar/Ativar IA\nCaminho para desativar e ativar as inserções auxiliadas por IA. Apenas para controle.",
+        "width": 272,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        448,
+        -960
+      ],
+      "typeVersion": 1,
+      "id": "b23368db-794f-4291-890c-1484e2e2061d",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## Modo IA\nParte responsável por pegar o texto bruto, transformar em JSON e encaminhar para ser inserido no banco de dados.",
+        "width": 272,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1360,
+        -624
+      ],
+      "typeVersion": 1,
+      "id": "1cc7b0d2-4b38-4c3a-9573-27481de23f04",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Confirmar\nFaz a confirmação da auditoria através do ID, se não, retornar mensagem de erro",
+        "width": 176
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1648,
+        -144
+      ],
+      "typeVersion": 1,
+      "id": "2c5db0ee-4fd4-4e5b-906a-6381768fdd76",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Switch\nAtravés do comando anterior o switch define para qual caminho ser executado",
+        "width": 176
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        352,
+        -416
+      ],
+      "typeVersion": 1,
+      "id": "30f1f6d4-2a23-427b-beaa-b58be87d122f",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "content": "## Consultar\nÉ possível consultar as auditorias pendentes, aprovados dos últimos 7 dias ou por nomes parecidos",
+        "height": 144,
+        "width": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        880,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "bf030875-7abc-41d5-ad21-e89fede3ba43",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "content": "## Delete\nFaz a remoção de uma auditoria através do ID",
+        "height": 96,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        928,
+        928
+      ],
+      "typeVersion": 1,
+      "id": "bc064931-b04c-43da-a8d0-925ae8f3e417",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "content": "## Inserir\nFaz a inserção de uma auditoria através do nome e preço",
+        "height": 96,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        928,
+        1216
+      ],
+      "typeVersion": 1,
+      "id": "f60f473d-fc9d-4367-9a40-cbfac4afa42f",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-flash-lite-latest",
+          "mode": "list",
+          "cachedResultName": "models/gemini-flash-lite-latest"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Você é um extrator de dados para um sistema de auditoria de preços.\nAbaixo está uma mensagem enviada por um funcionário ou gerente informando um novo preço ou desconto de um produto.\nSua única tarefa é extrair o nome do produto e o novo valor numérico.\n\nRegras OBRIGATÓRIAS:\n1. Retorne APENAS um formato JSON válido.\n2. Não inclua crases (```), marcações markdown, ou nenhum outro texto.\n3. Use exatamente as chaves \"produto\" e \"preco\".\n4. O preço deve ser apenas números e ponto (ex: 8.90).\n\nMensagem original:\n\"{{ $('Code in JavaScript').item.json.comando }}\""
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        864,
+        -432
+      ],
+      "id": "4aa109dc-37f1-443a-ac1d-9a8ef8a9be3d",
+      "name": "Saida_JSON",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "HKIkmCsvDPBTpuOY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Checar-Estado-IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Desativar-ModoIA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ativar-ModoIA",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Saida_JSON",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parser",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Menu-Principal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Code in JavaScript7",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Menu-Principal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Inserir-Confirmacao",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Informar-Erro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Aggregate2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar-por-Nome": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript5": {
+      "main": [
+        [
+          {
+            "node": "Send a text message7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consulta-Aprovados": {
+      "main": [
+        [
+          {
+            "node": "Aggregate1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parser": {
+      "main": [
+        [
+          {
+            "node": "Switch-Consultar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Send a text message10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch-Consultar": {
+      "main": [
+        [
+          {
+            "node": "Consulta-Pendentes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Consulta-Aprovados",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Consultar-por-Nome",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consulta-Pendentes": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Inserir-Modo-IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inserir-Modo-IA": {
+      "main": [
+        [
+          {
+            "node": "Send a text message9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Checar-Estado-IA": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Menu-Principal": {
+      "main": [
+        []
+      ]
+    },
+    "Inserir-Confirmacao": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Desativar-ModoIA": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ativar-ModoIA": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a text message1": {
+      "main": [
+        []
+      ]
+    },
+    "Send a text message9": {
+      "main": [
+        [
+          {
+            "node": "Inserir-Modo-IA1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript6": {
+      "main": [
+        [
+          {
+            "node": "Deletar-Auditoria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript7": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inserir-Auditoria1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Inserir-Auditoria1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deletar-Auditoria": {
+      "main": [
+        [
+          {
+            "node": "Send a text message11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Send a text message15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Saida_JSON": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "ff302e9f-a442-4751-b15f-cb2c91e86566",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "00741401e089b21c880634c111be9b8ce7a7f0c84b11b305af9e72182063c6ad"
+  },
+  "id": "7jRawl5FCPIpqjN2",
+  "tags": []
+}
