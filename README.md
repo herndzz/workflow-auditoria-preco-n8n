@@ -2,6 +2,8 @@
 
 Este é um sistema desenvolvido para facilitar o controle e a atualização de preços em supermercados ou distribuidoras. Em vez de usar cadernos de papel, a equipe utiliza um bot no Telegram (no celular) para enviar as atualizações. O sistema usa Inteligência Artificial para ler essas mensagens, organizar os dados e salvá-los de forma segura até serem aprovados. Tudo isso foi pensado para rodar num servidor caseiro simples (como um notebook antigo com o sistema Ubuntu).
 
+![Interface do Bot no Telegram](prints/print1.png)
+
 ## 1. TECNOLOGIAS UTILIZADAS
 - Automação: n8n (plataforma que liga tudo e cria as regras de funcionamento).
 - Banco de Dados: PostgreSQL 16 (onde ficam salvos os preços e os registros da equipe).
@@ -9,8 +11,13 @@ Este é um sistema desenvolvido para facilitar o controle e a atualização de p
 - Interface: Telegram (aplicativo usado pelos funcionários na loja).
 - Infraestrutura: Docker e Nginx Proxy Manager (para organizar os programas e garantir a segurança na conexão).
 
+![Fluxo de Automação no n8n](prints/print3.png)
+
 ## 2. O QUE O SISTEMA FAZ
 - Leitura Inteligente de Texto: O funcionário escreve uma mensagem normal (ex: "o preço da heineken subiu para 6.50") e a IA entende automaticamente qual é o produto e qual é o novo preço.
+
+![Exemplo de Leitura via IA](prints/print2.png)
+
 - Suporte a Várias Lojas: O banco de dados consegue separar e organizar as informações de diferentes lojas ou clientes ao mesmo tempo, sem misturar os dados de cada uma.
 - Modo Inteligente: O sistema sabe diferenciar quando o usuário quer usar a IA para registrar algo ou quando está apenas navegando nos menus básicos.
 - Aprovação na Prateleira: Qualquer novo preço entra como "Pendente". O funcionário precisa ir fisicamente até a prateleira e enviar um comando no celular para aprovar aquele preço. O sistema salva quem fez a aprovação e a que horas.
